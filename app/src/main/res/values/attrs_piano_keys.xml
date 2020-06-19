@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="PianoKeys">
+        <attr name="exampleString" format="string" />
+        <attr name="keySizeRatio" format="float" />
+        <attr name="drawKeyDivider" format="boolean" />
+        <attr name="smallKeysVisible" format="boolean" />
+        <attr name="drawSmallKeyOutline" format="boolean" />
+    </declare-styleable>
+</resources>
