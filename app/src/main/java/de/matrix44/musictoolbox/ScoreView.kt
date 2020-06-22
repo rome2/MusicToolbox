@@ -348,22 +348,22 @@ class ScoreView : View {
         )
 
         _exampleString = a.getString(
-            R.styleable.ScoreView_exampleString2
+            R.styleable.ScoreView_exampleString
         )
         _exampleColor = a.getColor(
-            R.styleable.ScoreView_exampleColor2,
+            R.styleable.ScoreView_exampleColor,
             exampleColor2
         )
         // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
         // values that should fall on pixel boundaries.
         _exampleDimension = a.getDimension(
-            R.styleable.ScoreView_exampleDimension2,
+            R.styleable.ScoreView_exampleDimension,
             exampleDimension2
         )
 
-        if (a.hasValue(R.styleable.ScoreView_exampleDrawable2)) {
+        if (a.hasValue(R.styleable.ScoreView_exampleDrawable)) {
             exampleDrawable2 = a.getDrawable(
-                R.styleable.ScoreView_exampleDrawable2
+                R.styleable.ScoreView_exampleDrawable
             )
             exampleDrawable2?.callback = this
         }

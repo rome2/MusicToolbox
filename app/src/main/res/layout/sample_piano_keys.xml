@@ -5,7 +5,7 @@
 
     <de.matrix44.musictoolbox.PianoKeys
         android:layout_width="match_parent"
-        android:layout_height="165dp"
+        android:layout_height="282dp"
         android:background="#ccc"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"

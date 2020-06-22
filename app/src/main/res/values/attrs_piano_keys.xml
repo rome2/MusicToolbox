@@ -1,9 +1,18 @@
 <resources>
     <declare-styleable name="PianoKeys">
-        <attr name="exampleString" format="string" />
         <attr name="keySizeRatio" format="float" />
         <attr name="drawKeyDivider" format="boolean" />
         <attr name="smallKeysVisible" format="boolean" />
         <attr name="drawSmallKeyOutline" format="boolean" />
+        <attr name="drawBigKeyOutline" format="boolean" />
+        <attr name="exampleDrawable2" format="color|reference" />
+        <attr name="lineColor" format="color|reference" />
+        <attr name="lineShadeColor" format="color|reference" />
+        <attr name="whiteKeyColor" format="color|reference" />
+        <attr name="whiteKeyShadeColor" format="color|reference" />
+        <attr name="blackKeyColor" format="color|reference" />
+        <attr name="blackKeyShadeColor" format="color|reference" />
+        <attr name="keyDownKeyColor" format="color|reference" />
+        <attr name="keyDownKeyShadeColor" format="color|reference" />
     </declare-styleable>
 </resources>
