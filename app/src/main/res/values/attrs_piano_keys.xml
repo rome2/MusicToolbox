@@ -5,7 +5,8 @@
         <attr name="smallKeysVisible" format="boolean" />
         <attr name="drawSmallKeyOutline" format="boolean" />
         <attr name="drawBigKeyOutline" format="boolean" />
-        <attr name="exampleDrawable2" format="color|reference" />
+        <attr name="markMiddleC" format="boolean" />
+        <attr name="markAllCs" format="boolean" />
         <attr name="lineColor" format="color|reference" />
         <attr name="lineShadeColor" format="color|reference" />
         <attr name="whiteKeyColor" format="color|reference" />

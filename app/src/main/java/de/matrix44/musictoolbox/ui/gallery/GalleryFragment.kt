@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import de.matrix44.musictoolbox.PianoKeys
 import de.matrix44.musictoolbox.R
 
 class GalleryFragment : Fragment() {
@@ -18,6 +19,16 @@ class GalleryFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_gallery, container, false)
+        val keys: PianoKeys = root.findViewById(R.id.pianoKeys)
+        keys.pianoKeyListener = object : PianoKeys.PianoKeyListener {
+            override fun onPianoKeyDown(noteNumber: Int) {
+                keys.noteOn(noteNumber)
+            }
+
+            override fun onPianoKeyUp(noteNumber: Int) {
+                keys.noteOff(noteNumber)
+            }
+        }
         return root
     }
 }
