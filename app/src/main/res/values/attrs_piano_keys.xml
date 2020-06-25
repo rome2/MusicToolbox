@@ -7,6 +7,8 @@
         <attr name="drawBigKeyOutline" format="boolean" />
         <attr name="markMiddleC" format="boolean" />
         <attr name="markAllCs" format="boolean" />
+        <attr name="octaveMode" format="boolean" />
+        <attr name="localOff" format="boolean" />
         <attr name="lineColor" format="color|reference" />
         <attr name="lineShadeColor" format="color|reference" />
         <attr name="whiteKeyColor" format="color|reference" />
@@ -15,5 +17,6 @@
         <attr name="blackKeyShadeColor" format="color|reference" />
         <attr name="keyDownKeyColor" format="color|reference" />
         <attr name="keyDownKeyShadeColor" format="color|reference" />
+        <attr name="currentOctave" format="integer" />
     </declare-styleable>
 </resources>

@@ -19,12 +19,16 @@ package de.matrix44.musictoolbox
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.INVALID_POINTER_ID
 import android.view.View
+import kotlin.math.absoluteValue
 
 /**
  * Virtual piano keyboard view.
@@ -33,11 +37,11 @@ import android.view.View
  * for the big keyboard. This view is highly customizable in color and shape. It has two modes of
  * operation: A regular mode where the user can swipe through the key range as he likes and an
  * octave mode where there is only one octave visible. This is useful if you have to choose a
- * specific note (eg in a card game).
+ * specific note (eg in a flash card game).
  *
  * There is no feedback for hit keys by default. You'll have to call noteOn/noteOff in your piano
- * key message handler. This separation is done to be able to also show notes played from other
- * sources on the keyboard (eg from a sequencer or note checker).
+ * key message handler or set localOff to true. This separation is done to be able to also show
+ * notes played from other sources on the keyboard (eg from a sequencer or note checker).
  *
  * This class is a regular view with properties, events and so on. To react on key messages you'll
  * have to implement the PianoKeyListener interface like:
@@ -250,6 +254,46 @@ class PianoKeys : View {
         }
 
     /**
+     * Turn octave mode on or off.
+     */
+    private var _octaveMode = false
+    @Suppress("unused")
+    var octaveMode: Boolean
+        get() = _octaveMode
+        set(value) {
+            _octaveMode = value
+            invalidateMeasurements()
+            invalidate()
+        }
+
+    /**
+     * The current octave if we are in octave mode.
+     *
+     * The default octave is 4, starting at middle C.
+     */
+    private var _currentOctave = 4
+    @Suppress("unused")
+    var currentOctave: Int
+        get() = _currentOctave
+        set(value) {
+            _currentOctave = value
+            invalidateMeasurements()
+            invalidate()
+        }
+
+    /**
+     * Turn local keyboard feedback on or off.
+     */
+    private var _localOff = true
+    @Suppress("unused")
+    var localOff: Boolean
+        get() = _localOff
+        set(value) {
+            _localOff = value
+            invalidate()
+        }
+
+    /**
      * Implement this interface to receive key messages from this view.
      */
     interface PianoKeyListener {
@@ -353,6 +397,8 @@ class PianoKeys : View {
         _drawBigKeyOutline    = a.getBoolean(R.styleable.PianoKeys_drawBigKeyOutline,   _drawBigKeyOutline)
         _markMiddleC          = a.getBoolean(R.styleable.PianoKeys_markMiddleC,         _markMiddleC)
         _markAllCs            = a.getBoolean(R.styleable.PianoKeys_markAllCs,           _markAllCs)
+        _octaveMode           = a.getBoolean(R.styleable.PianoKeys_octaveMode,          _octaveMode)
+        _localOff             = a.getBoolean(R.styleable.PianoKeys_localOff,            _localOff)
         _lineColor            = a.getColor(R.styleable.PianoKeys_lineColor,            _lineColor)
         _lineShadeColor       = a.getColor(R.styleable.PianoKeys_lineShadeColor,       _lineShadeColor)
         _whiteKeyColor        = a.getColor(R.styleable.PianoKeys_whiteKeyColor,        _whiteKeyColor)
@@ -361,6 +407,7 @@ class PianoKeys : View {
         _blackKeyShadeColor   = a.getColor(R.styleable.PianoKeys_blackKeyShadeColor,   _blackKeyShadeColor)
         _keyDownKeyColor      = a.getColor(R.styleable.PianoKeys_keyDownKeyColor,      _keyDownKeyColor)
         _keyDownKeyShadeColor = a.getColor(R.styleable.PianoKeys_keyDownKeyShadeColor, _keyDownKeyShadeColor)
+        _currentOctave        = a.getInt(R.styleable.PianoKeys_currentOctave, _currentOctave)
         a.recycle()
 
         // Create all of our painters:
@@ -415,7 +462,7 @@ class PianoKeys : View {
     /**
      * Update the dimensions of the small key area and the keys inside the area.
      *
-     * The area of the small keyboard defines the available space for the big keys. The width of
+     * The area of the small keyboard defines the available space for the big keys. The width of the
      * area is divided into 52 white keys and the height is determined by the key width scaled by
      * the keySizeRatio property value.
      */
@@ -486,7 +533,7 @@ class PianoKeys : View {
         bigKeysRect.right  = width - paddingRight.toFloat()
         bigKeysRect.bottom = height - paddingBottom.toFloat()
         val octaveHeight  = bigKeysRect.height()
-        val whiteKeyWidth = octaveHeight / _keySizeRatio
+        val whiteKeyWidth = if (_octaveMode) bigKeysRect.width() / 7.0f else octaveHeight / _keySizeRatio
         val octaveWidth   = whiteKeyWidth * 7.0f
 
         // Calc total width and scroll offset:
@@ -496,6 +543,7 @@ class PianoKeys : View {
         var octaveStart = -keyLayout[smallKeys[0].noteNumber % 12].r.left * octaveWidth
 
         // Loop through all notes:
+        var octaveX = 0.0f
         for (key in bigKeys) {
 
             // Get key to update:
@@ -511,6 +559,10 @@ class PianoKeys : View {
             // Switch to next octave?
             if ((key.noteNumber + 1) % 12 == 0)
                 octaveStart += octaveWidth
+
+            // Found current visible C?
+            if (key.noteNumber % 12 == 0 && key.noteNumber / 12 == (_currentOctave + 1))
+               octaveX = key.r.left
         }
 
         // Update text size to be half a key in width:
@@ -518,12 +570,24 @@ class PianoKeys : View {
         textPaint!!.textSize = 100.0f
         val tw = textPaint!!.measureText("C4")
         textPaint!!.textSize = maxTextWidth * 100.0f / tw
+
+        // Update scroll position if we are in octave mode:
+        if (_octaveMode) {
+            scrollPosition = octaveX / (bigKeyboardWidth - bigKeysRect.width())
+        }
     }
 
     /**
      * Internal helper that calculates the visible area of the big keyboard.
      */
     private fun updateVisibleArea() {
+
+        // Octave mode is fixed:
+        if (_octaveMode) {
+            lowestVisibleKey = (_currentOctave + 1) * 12
+            highestVisibleKey = lowestVisibleKey + 11
+            return
+        }
 
         // Calc scroll offset:
         val xOffset = scrollPosition * (bigKeyboardWidth - bigKeysRect.width())
@@ -707,7 +771,7 @@ class PianoKeys : View {
             if (key.isBlack)
                 continue
 
-            // The draw function does not include the right and bottom border:
+            // The drawRect function does not include the right and bottom border:
             val left = bigKeysRect.left + key.r.left - xOffset
             val right = bigKeysRect.left + key.r.right - xOffset
             val drawRect = RectF(left, key.r.top, right + 1.0f, key.r.bottom + 1.0f)
@@ -739,7 +803,8 @@ class PianoKeys : View {
             if (_markAllCs && key.noteNumber % 12 == 0) {
                 val o = (key.noteNumber / 12) - 1
                 val m = (right - left) * 0.1f
-                canvas.drawText("C$o", left + m, key.r.bottom - m, textPaint!!)
+                if (right - m < bigKeysRect.right && left + m > bigKeysRect.left)
+                    canvas.drawText("C$o", left + m, key.r.bottom - m, textPaint!!)
             }
         }
 
@@ -808,7 +873,7 @@ class PianoKeys : View {
                 val x = ev.getX(pointerIndex)
                 val y = ev.getY(pointerIndex)
 
-                // Start dragging the small keyboard?
+                // Start dragging on the small keyboard?
                 if (smallKeysRect.contains(x, y) && draggingPointerId == INVALID_POINTER_ID) {
                     draggingPointerId = ev.getPointerId(0)
                     lastDraggingX = x
@@ -881,6 +946,10 @@ class PianoKeys : View {
 
                         // Fire key hit event:
                         _pianoKeyListener?.onPianoKeyDown(hitKey.noteNumber)
+
+                        // Update display if needed:
+                        if (!_localOff)
+                            noteOn(hitKey.noteNumber)
                     }
                 }
             }
@@ -897,23 +966,45 @@ class PianoKeys : View {
 
                     // Convert amount into scrolling space:
                     val db = (bigKeyboardWidth - bigKeysRect.width()) / bigKeyboardWidth
-                    val ds = dx / (smallKeysRect.width() * db)
+                    val deltaScroll = dx / (smallKeysRect.width() * db)
 
-                    // Update scroll position:
-                    scrollPosition += ds
-                    if (scrollPosition < 0.0f)
-                        scrollPosition = 0.0f
-                    if (scrollPosition > 1.0f)
-                        scrollPosition = 1.0f
+                    // Octave mode jumps from octave to octave:
+                    if (_octaveMode) {
 
-                    // The small keyboard needs an update of the visible keys:
-                    updateVisibleArea()
+                        // Calc the width of one octave in scroll space:
+                        val dw = bigKeysRect.width() / bigKeyboardWidth
 
-                    // Redraw view:
-                    invalidate()
+                        // Dragged enough to reach the next octave?
+                        if (deltaScroll.absoluteValue > dw) {
 
-                    // Remember touch position for the next move event:
-                    lastDraggingX = x
+                            // Calc new octave and clip it to the keyboard range:
+                            val newOctave = if (deltaScroll < 0.0f) currentOctave - 1 else currentOctave + 1
+                            if (newOctave in 1..7)
+                                currentOctave = newOctave // The setter will invalidate the view.
+
+                            // Start new drag towards the next octave:
+                            lastDraggingX = x
+                        }
+
+                    // Regular mode moves smoothly between the keys:
+                    } else {
+
+                        // Update scroll position:
+                        scrollPosition += deltaScroll
+                        if (scrollPosition < 0.0f)
+                            scrollPosition = 0.0f
+                        if (scrollPosition > 1.0f)
+                            scrollPosition = 1.0f
+
+                        // The small keyboard needs an update of the visible keys:
+                        updateVisibleArea()
+
+                        // Redraw view:
+                        invalidate()
+
+                        // Remember current position for the next move event:
+                        lastDraggingX = x
+                    }
                 }
             }
 
@@ -947,6 +1038,10 @@ class PianoKeys : View {
 
                             // Remove from pressed keys:
                             downKeys.remove(downKey)
+
+                            // Update display if needed:
+                            if (!_localOff)
+                                noteOff(downKey.noteNumber)
 
                             // Done:
                             break
