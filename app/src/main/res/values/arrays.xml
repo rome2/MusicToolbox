@@ -1,0 +1,83 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+
+    <string-array name="tempo_definitions">
+        <item> </item>
+        <item>
+            This is a small collection of tempo markings that you might encounter in sheet music.
+            Please keep in mind that these markings are used to describe the character of the piece.
+            The actual tempo may vary from composer to composer, from time period to time period or
+            from country to country. The supplied BPM ranges are typical values used in the
+            literature so they should provide a good starting point.
+        </item>
+        <item>Arghissimo</item>
+        <item>Very, very slow, 0 bpm- 24 bpm</item>
+        <item>Adagissimo</item>
+        <item>Very slow, 24 bpm - 30 bpm</item>
+        <item>Grave</item>
+        <item>Slowly and solemnly, 25 bpm - 45 bpm</item>
+        <item>Largo</item>
+        <item>Broadly, 40 bpm - 60 bpm</item>
+        <item>Lento</item>
+        <item>Slowly 45 bpm - 60 bpm</item>
+        <item>Larghetto</item>
+        <item>Rather broadly, 60 bpm - 66 bpm</item>
+        <item>Adagio</item>
+        <item>Slowly with great expression, 66 bpm - 76 bpm</item>
+        <item>Adagietto</item>
+        <item>Slightly faster than Adagio, 72 bpm - 80 bpm</item>
+        <item>Andante</item>
+        <item>At a walking speed, 76 bpm - 108 bpm</item>
+        <item>Andantino</item>
+        <item>Slightly faster than Andante 80 bpm - 108 bpm</item>
+        <item>Marcia moderato</item>
+        <item>Moderately, like a march, 83 bpm - 85 bpm</item>
+        <item>Andante moderato</item>
+        <item>Between Andante and Moderato, 92 bpm - 112 bpm</item>
+        <item>Moderato</item>
+        <item>At a moderate speed, 108 bpm - 120 bpm</item>
+        <item>Allegretto</item>
+        <item>Moderately fast, 112 bpm - 120 bpm</item>
+        <item>Allegro moderato</item>
+        <item>Almost Allegro, 116 bpm - 120 bpm</item>
+        <item>Allegro</item>
+        <item>Fast, quickly, and bright, 120 bpm - 156 bpm</item>
+        <item>Vivace</item>
+        <item>Lively and fast, 156 bpm - 176 bpm</item>
+        <item>Vivacissimo</item>
+        <item>Very fast and lively, 172 bpm - 176 bpm</item>
+        <item>Allegrissimo</item>
+        <item>Very fast, 172 bpm – 176 bpm</item>
+        <item>Allegro vivace</item>
+        <item>Very fast, 172 bpm - 176 bpm</item>
+        <item>Presto</item>
+        <item>Very, very fast, 168 bpm - 200 bpm</item>
+        <item>Prestissimo</item>
+        <item>Even faster, 200+ bpm</item>
+        <item>Accelerando (accel.)</item>
+        <item>Get quicker</item>
+        <item>Accelerato</item>
+        <item>Suddenly increase the tempo</item>
+        <item>Rallentando (rall.)</item>
+        <item>Slow down, let go</item>
+        <item>Ritardando (ritard., rit.)</item>
+        <item>Deliberately slow down</item>
+        <item>Ritenuto (riten., rit.)</item>
+        <item>Suddenly slower</item>
+        <item>A tempo</item>
+        <item>Return to the original tempo</item>
+        <item>Allargando</item>
+        <item>Become gradually slower and more stately</item>
+        <item>Rubato</item>
+        <item>Free, varying tempo, expressive</item>
+    </string-array>
+</resources>

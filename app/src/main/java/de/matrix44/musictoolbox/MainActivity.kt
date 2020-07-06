@@ -14,6 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 
+// Fragments: https://developer.android.com/guide/components/fragments
+// ViewModel: https://codelabs.developers.google.com/codelabs/kotlin-android-training-view-model/#3
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_gallery, R.id.nav_home, R.id.nav_slideshow), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_music_theory, R.id.nav_settings), drawerLayout)
 
         val navController = findNavController(R.id.nav_host_fragment)
         setupActionBarWithNavController(navController, appBarConfiguration)

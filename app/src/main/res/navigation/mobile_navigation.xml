@@ -10,23 +10,15 @@
         android:name="de.matrix44.musictoolbox.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-
         <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_home_second"
-        android:name="de.matrix44.musictoolbox.ui.home.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
+            android:id="@+id/action_nav_home_to_nav_settings"
+            app:destination="@id/nav_settings" />
         <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
-
-        <argument
-            android:name="myArg"
-            app:argType="string" />
+            android:id="@+id/action_nav_home_to_nav_music_theory"
+            app:destination="@id/nav_music_theory" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_tools"
+            app:destination="@id/nav_tools" />
     </fragment>
 
     <fragment
@@ -40,4 +32,32 @@
         android:name="de.matrix44.musictoolbox.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_music_theory"
+        android:name="de.matrix44.musictoolbox.ui.musictheory.MusicTheoryFragment"
+        android:label="@string/menu_music_theory"
+        tools:layout="@layout/fragment_music_theory" />
+
+    <fragment
+        android:id="@+id/nav_tempo_table"
+        android:name="de.matrix44.musictoolbox.ui.tools.TempoTableFragment"
+        android:label="@string/menu_tempo_table"
+        tools:layout="@layout/fragment_tempo_table" />
+
+    <fragment
+        android:id="@+id/nav_tools"
+        android:name="de.matrix44.musictoolbox.ui.tools.ToolsFragment"
+        android:label="@string/menu_tools"
+        tools:layout="@layout/fragment_tools" >
+        <action
+            android:id="@+id/action_nav_tools_to_nav_tempo_table"
+            app:destination="@id/nav_tempo_table" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="de.matrix44.musictoolbox.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings" />
+
 </navigation>
