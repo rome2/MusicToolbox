@@ -19,6 +19,7 @@ package de.matrix44.musictoolbox.midi
 
 import kotlin.experimental.and
 import kotlin.experimental.or
+import kotlin.math.roundToInt
 
 // https://blog.stylingandroid.com/midipad-midi-events/
 
@@ -46,7 +47,7 @@ class MIDIMessage constructor(
      * The MIDI channel for the data.
      */
     var channel: Int
-        get() = _channel as Int
+        get() = _channel.toInt()
         set(value) {
             _channel = value.toByte()
         }
@@ -58,7 +59,7 @@ class MIDIMessage constructor(
      * least 1 parameter in the data section.
      */
     var parameter1 : Int
-        get() = _data[0] as Int
+        get() = _data[0].toInt()
         set(value) {
             _data[0] = value.toByte()
         }
@@ -70,7 +71,7 @@ class MIDIMessage constructor(
      * least 2 parameters in the data section.
      */
     var parameter2 : Int
-        get() = _data[1] as Int
+        get() = _data[1].toInt()
         set(value) {
             _data[1] = value.toByte()
         }
@@ -251,7 +252,7 @@ class MIDIMessage constructor(
             val floatVal = value.coerceIn(-1.0f, 1.0f)
 
             // Convert to 14 bit value:
-            val intVal = ((floatVal * 16384.0f) + 8192.0f) as Int;
+            val intVal : Int = (((floatVal * 16384.0f) + 8192.0f).roundToInt())
 
             // Extract bits
             val msb = (intVal shr 7) and 0x7F
